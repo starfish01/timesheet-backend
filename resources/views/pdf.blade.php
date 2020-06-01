@@ -4,24 +4,38 @@
         <title>{{ $title ?? ''  }}</title>
     </head>
     <body>
-    <h1>Timesheet - {{ $date }} - {{ $name }}</h1>
-        <table>
-        <thead>
-            <tr>
-            <th>Day</th>
-            <th>Date</th>
-            <th>Email</th>
-            <th>Phone</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($dayData as $day)
-            <tr>
-                <td>{{ $day['day'] }}</td>
-                <td>{{ $day['date'] }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-        </table>
+        <h3>Timesheet - {{ $date }} - {{ $name }}</h3>
+
+        @foreach($dayData as $day)
+
+            <div>{{ $day->day }} - {{ $day->date }} |   
+                @if($day->data)
+                    @isset($day->data->start)
+                        {{$day->data->start}} - {{$day->data->end}} | 
+                        Break 20: {{$day->data->break_20 ? 'Y' : 'N'}} | Break 30: {{$day->data->break_30 ? 'Y' : 'N'}}
+                    @endisset
+                    @empty($day->data->start)
+                        Non Work Day
+                    @endempty
+                @endisset
+            </div>
+            <div>
+               
+                @isset($day->data->reason)
+                    @if (!empty ( $day->data->reason))
+                        <div>Reason: {{$day->data->reason}}</div>
+                    @endif
+                @endempty
+
+                @isset($day->data->sites)
+                    @foreach($day->data->sites as $site)
+                        {{$site->title}}: {{$site->timeSpent}}
+                    @endforeach
+                @endisset
+            </div>
+            <hr>
+
+        @endforeach
+
     </body>
 </html>

@@ -13,7 +13,7 @@ class TimesheetController extends Controller
         $data = [
             'name' => $request->name,
             'date' => date('d/m/Y',strtotime($request->weekCommencing)),
-            'dayData' => json_decode($request->dayData, true),
+            'dayData' => json_decode($request->dayData),
         ];
 
         $pdf = \PDF::loadView('pdf', $data);
